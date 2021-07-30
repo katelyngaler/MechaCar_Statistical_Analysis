@@ -1,0 +1,67 @@
+---
+title: "Challenge_15"
+output: html_document
+---
+## Deliverable 1
+
+```{r}
+library(dplyr)
+mecha_df <- read.csv('MechaCar_mpg.csv')
+head(mecha_df)
+
+
+```
+
+```{r}
+mpg_reg <- lm(formula= mpg ~ vehicle_length + vehicle_weight + spoiler_angle + ground_clearance + AWD, data = mecha_df)
+
+summary(mpg_reg)
+
+
+```
+The intercept, vehicle length, and ground clearance show as the biggest contributers to correlation, followed by weight, with spoiler angle and AWD having non-significant contribution. P-value of  5.35e-11 indicates that the slope is not zero. R-squared of 0.71 is decent, but still indicates that about 30% of the variation is not accounted for with these parameters.
+
+## Deliverable 2
+
+```{r}
+Coil_tbl <- read.csv('Suspension_Coil.csv')
+head(Coil_tbl)
+
+
+```
+```{r}
+
+total_summary <- summarize(Coil_tbl, Mean = mean(PSI), Median = median(PSI), Variance = var(PSI), SD = sd(PSI))
+total_summary
+
+```
+```{r}
+lot_summary <- Coil_tbl %>% group_by(Manufacturing_Lot) %>%
+  summarize(Mean = mean(PSI), Median = median(PSI), Variance = var(PSI), SD = sd(PSI))
+
+lot_summary
+
+```
+
+## Deliverable 3
+
+
+```{r}
+all_lots <- t.test(Coil_tbl$PSI, mu = 1500)
+paste('The p-value for all lots is: ',round(all_lots$p.value,4))
+
+lot1 <- subset(Coil_tbl, Manufacturing_Lot == 'Lot1')
+lot2 <- subset(Coil_tbl, Manufacturing_Lot == 'Lot2')
+lot3 <- subset(Coil_tbl, Manufacturing_Lot == 'Lot3')
+
+lot1_ttest <- t.test(lot1$PSI, mu = 1500)
+lot2_ttest <- t.test(lot2$PSI, mu = 1500)
+lot3_ttest <- t.test(lot3$PSI, mu = 1500)
+
+paste('The p-value for lot 1 is:', round(lot1_ttest$p.value,4), 'The p-value for lot 2 is:', round(lot2_ttest$p.value,4), 'The p-value for lot 3 is:',round(lot3_ttest$p.value,4))
+
+
+
+```
+
+
